@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.UserDao">
+
+    <select id="getUserById" resultType="com.example.demo.bean.UserBean">
+        select *
+        from sign.user
+        where userid=#{userid}
+    </select>
+
+    <insert id="addUser" keyColumn="userid" useGeneratedKeys="true" parameterType="com.example.demo.bean.UserBean" keyProperty="userid">
+        insert into sign.user
+        (userpassword,username)
+        values(#{userpassword},#{username})
+    </insert>
+
+    <update id="setUserColor">
+        update sign.user
+        <set>
+            color=#{userColor}
+        </set>
+        where userid=#{userid}
+    </update>
+
+    <update id="setUserDirection">
+        update sign.user
+        <set>
+            direction=#{direction}
+        </set>
+        where userid=#{userid}
+    </update>
+
+    <update id="setOtherId">
+        update sign.user
+        <set>
+            otherid=#{otherid}
+        </set>
+        where userid=#{userid}
+    </update>
+
+    <insert id="addMessage" keyColumn="sign_message_id" useGeneratedKeys="true" parameterType="com.example.demo.bean.MessageBean" keyProperty="signMessageId">
+        insert into sign.signmessage
+            (type,event,message,progress,verify_data)
+        values(#{type},#{event},#{message},#{progress},#{verifyData})
+    </insert>
+
+    <insert id="sign" keyColumn="signid" useGeneratedKeys="true" parameterType="com.example.demo.bean.SignBean" keyProperty="signid">
+        insert into sign.sign
+            (sign_date,sign_time,sign_message,userid)
+        values(#{signDate},now(),#{signMessage},#{userid})
+    </insert>
+
+    <select id="getSignByDate" resultType="com.example.demo.bean.SignBean">
+        select *
+        from sign.sign
+        where sign_date=#{date} and userid=#{userid}
+    </select>
+
+    <update id="updateSign" parameterType="com.example.demo.bean.SignBean">
+        update sign.sign
+        <set>
+            sign_message=#{signMessage},
+            sign_time = now()
+        </set>
+        where userid=#{userid} and sign_date=#{signDate}
+    </update>
+
+    <select id="getSignByUserId" resultType="com.example.demo.bean.SignBean">
+        select signid,
+            sign_date signDate,
+            sign_time signTime,
+            sign_message signMessage,
+            userid
+        from sign.sign
+        where userid=#{userid}
+    </select>
+
+    <select id="getSignMessageById" resultType="com.example.demo.bean.MessageBean">
+        select *
+        from sign.signmessage
+        where sign_message_id=#{messageId}
+    </select>
+
+</mapper>
